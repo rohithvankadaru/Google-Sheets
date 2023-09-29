@@ -1,0 +1,11 @@
+th,td{
+    min-width: 80px;
+    border: 1px solid;
+}
+table{
+    border-collapse: collapse;
+}
+
+td{
+    outline: none;
+}
