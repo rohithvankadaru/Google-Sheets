@@ -15,9 +15,21 @@ td{
     border: 2px solid grey;
     border-radius: 5px;
 }
+#bold-btn{
+    font-weight: bold;
+}
+#underline-btn{
+    text-decoration: underline 1.5px;
+}
+
 .align-btn{
     border: none;
 }
 #left-btn{
     background-color: #efefef;
+}
+
+#cut-btn, #copy-btn, #paste-btn{
+    background-color: transparent;
+    border: none;
 }

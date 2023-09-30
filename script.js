@@ -24,8 +24,15 @@ const fontSizeDropdown = document.getElementById('font-size-dropdown');
 const bgColorInput = document.getElementById('bgColor');
 const fontColorInput = document.getElementById('fontColor');
 
+const cutBtn = document.getElementById('cut-btn');
+const copyBtn = document.getElementById('copy-btn');
+const pasteBtn = document.getElementById('paste-btn');
+
 let prevCellId;
 let currentCell;
+
+let cutCopyStoreCell;
+let isCutOperation;
 
 function colGenerator(typeOfCell, tableRow, rowNumber) {
     for (let col = 0; col < 26; col++) {
@@ -138,25 +145,68 @@ function setBackground(color, ...buttons) {
 }
 
 
-fontStyleDropdown.addEventListener('change', ()=>{
+fontStyleDropdown.addEventListener('change', () => {
     if (currentCell) {
         currentCell.style.fontFamily = fontStyleDropdown.value;
     }
 });
-fontSizeDropdown.addEventListener('change', ()=>{
+fontSizeDropdown.addEventListener('change', () => {
     if (currentCell) {
         currentCell.style.fontSize = fontSizeDropdown.value;
     }
 });
 
-bgColorInput.addEventListener('input', ()=>{
+bgColorInput.addEventListener('input', () => {
     if (currentCell) {
         currentCell.style.backgroundColor = bgColorInput.value;
     }
 });
 
-fontColorInput.addEventListener('input',()=>{
+fontColorInput.addEventListener('input', () => {
     if (currentCell) {
         currentCell.style.color = fontColorInput.value;
     }
 });
+
+cutBtn.addEventListener('click', () => {
+    if (currentCell) {
+        isCutOperation = true;
+        cutCopyStoreCell = {
+            text: currentCell.innerText,
+            style: currentCell.style.cssText
+        }
+
+        currentCell.innerText = null;
+        currentCell.style = null;
+    }
+});
+
+copyBtn.addEventListener('click', () => {
+    if (currentCell) {
+        isCutOperation = false;
+        cutCopyStoreCell = {
+            text: currentCell.innerText,
+            style: currentCell.style.cssText
+        }
+    }
+});
+
+
+pasteBtn.addEventListener('click', ()=>{
+    if (cutCopyStoreCell) {
+        currentCell.innerText = cutCopyStoreCell.text;
+        currentCell.style.cssText = cutCopyStoreCell.style;
+        if (isCutOperation) cutCopyStoreCell = undefined;
+    }
+})
+
+
+
+
+
+
+
+
+
+
+//TODO implement dynamic typing of font size
