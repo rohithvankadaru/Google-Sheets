@@ -9,3 +9,12 @@ table{
 td{
     outline: none;
 }
+.excel-btn{
+    background-color: transparent;
+    padding: 7px 20px;
+    border: 2px solid grey;
+    border-radius: 5px;
+}
+#left-btn{
+    background-color: #efefef;
+}

@@ -11,8 +11,38 @@
 
 <body>
 
-    <h2 id="current-cell">No Cell selected</h2>
-    <button id="bold-btn">B</button>
+    <div>
+        <h2 id="current-cell">No Cell selected</h2>
+        <button id="bold-btn" class="excel-btn">B</button>
+        <button id="itallic-btn" class="excel-btn">I</button>
+        <button id="underline-btn" class="excel-btn">U</button>
+        <button id="left-btn" class="excel-btn">Left</button>
+        <button id="center-btn" class="excel-btn">Center</button>
+        <button id="right-btn" class="excel-btn">Right</button>
+        <select id="font-style-dropdown">
+            <option>font style</option>
+            <option value="serif">Serif</option>
+            <option value="sans-serif">Sans Serif</option>
+            <option value="monospace">monospace</option>
+            <option value="cursive">Cursive</option>
+        </select>
+        <select id="font-size-dropdown">
+            <option value="16px">font size</option>
+            <option value="10px">10</option>
+            <option value="12px">12</option>
+            <option value="14px">14</option>
+            <option value="16px">16</option>
+            <option value="18px">18</option>
+        </select>
+
+        <label for="bgColor">bg Color</label>
+        <input type="color" id="bgColor">
+
+        <label for="fontColor">font Color</label>
+        <input type="color" id="fontColor">
+    </div>
+
+    <br>
 
     <table id="my-table">
         <thead>
