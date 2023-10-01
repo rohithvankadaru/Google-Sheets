@@ -45,6 +45,7 @@ function colGenerator(typeOfCell, tableRow, rowNumber) {
             cell.setAttribute('id', `${String.fromCharCode(col + 65)}${rowNumber}`);
             cell.setAttribute("contentEditable", true);
             cell.addEventListener('focus', (event) => focusHandler(event.target));
+            cell.style.textAlign = 'left';
         }
         tableRow.appendChild(cell);
     }
@@ -81,9 +82,29 @@ function focusHandler(cell) {
     buttonHighlighter(itallicBtn, 'fontStyle', 'italic');
     buttonHighlighter(underlineBtn, 'textDecoration', 'underline');
 
+    console.log(currentCell.textAlign);
+    setBackground(transparent, leftBtn, rightBtn, centerBtn);
+    buttonHighlighter(rightBtn, 'textAlign', 'right');
+    buttonHighlighter(centerBtn, 'textAlign', 'center');
+    buttonHighlighter(leftBtn, 'textAlign', 'left');
+
     prevCellId = currentCell.id;
 
 }
+
+
+
+// function textAligner(button, textPosition) {
+
+//     button.addEventListener('click', () => {
+//         if (currentCell) {
+//             setBackground(transparent, leftBtn, rightBtn, centerBtn);
+//             button.style.backgroundColor = '#efefef';
+//             currentCell.style.textAlign = textPosition;
+//         }
+//     });
+// }
+
 
 
 // Fn for highlighiting btns on their properties
