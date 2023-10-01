@@ -3,6 +3,7 @@ const ROWS = 100;
 
 
 const transparent = 'transparent';
+const btnHighlightColor = '#efefef';
 
 
 const tableHeadRow = document.getElementById('table-heading-row');
@@ -82,7 +83,6 @@ function focusHandler(cell) {
     buttonHighlighter(itallicBtn, 'fontStyle', 'italic');
     buttonHighlighter(underlineBtn, 'textDecoration', 'underline');
 
-    console.log(currentCell.textAlign);
     setBackground(transparent, leftBtn, rightBtn, centerBtn);
     buttonHighlighter(rightBtn, 'textAlign', 'right');
     buttonHighlighter(centerBtn, 'textAlign', 'center');
@@ -94,19 +94,6 @@ function focusHandler(cell) {
 
 
 
-// function textAligner(button, textPosition) {
-
-//     button.addEventListener('click', () => {
-//         if (currentCell) {
-//             setBackground(transparent, leftBtn, rightBtn, centerBtn);
-//             button.style.backgroundColor = '#efefef';
-//             currentCell.style.textAlign = textPosition;
-//         }
-//     });
-// }
-
-
-
 // Fn for highlighiting btns on their properties
 function buttonHighlighter(button, styleProperty, styling) {
 
@@ -114,7 +101,7 @@ function buttonHighlighter(button, styleProperty, styling) {
         button.style.backgroundColor = transparent;
     }
     else {
-        button.style.backgroundColor = '#efefef';
+        button.style.backgroundColor = btnHighlightColor;
     }
 }
 
@@ -127,14 +114,16 @@ function setHeaderColor(colId, rowId, color) {
 //  Adding Event Listner to styling buttons
 function addEventListenerToBtns(button, styleProperty, styling, styleRemover) {
     button.addEventListener('click', () => {
-        if (currentCell) {
-            if (currentCell.style[styleProperty] === styling) {
-                currentCell.style[styleProperty] = styleRemover;
-                button.style.backgroundColor = transparent;
-            } else {
-                currentCell.style[styleProperty] = styling
-                button.style.backgroundColor = '#efefef';
-            }
+        if (!currentCell) { 
+            currentCell = document.getElementById('A1');
+            currentCell.focus();
+         }
+        if (currentCell.style[styleProperty] === styling) {
+            currentCell.style[styleProperty] = styleRemover;
+            button.style.backgroundColor = transparent;
+        } else {
+            currentCell.style[styleProperty] = styling
+            button.style.backgroundColor = btnHighlightColor;
         }
     })
 }
@@ -147,11 +136,13 @@ addEventListenerToBtns(underlineBtn, 'textDecoration', 'underline', 'none');
 function textAligner(button, textPosition) {
 
     button.addEventListener('click', () => {
-        if (currentCell) {
-            setBackground(transparent, leftBtn, rightBtn, centerBtn);
-            button.style.backgroundColor = '#efefef';
-            currentCell.style.textAlign = textPosition;
-        }
+        if (!currentCell) { 
+            currentCell = document.getElementById('A1');
+            currentCell.focus();
+         }
+        setBackground(transparent, leftBtn, rightBtn, centerBtn);
+        button.style.backgroundColor = btnHighlightColor;
+        currentCell.style.textAlign = textPosition;
     });
 }
 
@@ -167,26 +158,34 @@ function setBackground(color, ...buttons) {
 
 
 fontStyleDropdown.addEventListener('change', () => {
-    if (currentCell) {
-        currentCell.style.fontFamily = fontStyleDropdown.value;
-    }
+    if (!currentCell) { 
+        currentCell = document.getElementById('A1');
+        currentCell.focus();
+     }
+    currentCell.style.fontFamily = fontStyleDropdown.value;
 });
 fontSizeDropdown.addEventListener('change', () => {
-    if (currentCell) {
+    if (!currentCell) { 
+        currentCell = document.getElementById('A1');
+        currentCell.focus();
+     }
         currentCell.style.fontSize = fontSizeDropdown.value;
-    }
 });
 
 bgColorInput.addEventListener('input', () => {
-    if (currentCell) {
+    if (!currentCell) { 
+        currentCell = document.getElementById('A1');
+        currentCell.focus();
+     }
         currentCell.style.backgroundColor = bgColorInput.value;
-    }
 });
 
 fontColorInput.addEventListener('input', () => {
-    if (currentCell) {
+    if (!currentCell) { 
+        currentCell = document.getElementById('A1');
+        currentCell.focus();
+     }
         currentCell.style.color = fontColorInput.value;
-    }
 });
 
 cutBtn.addEventListener('click', () => {
@@ -213,7 +212,7 @@ copyBtn.addEventListener('click', () => {
 });
 
 
-pasteBtn.addEventListener('click', ()=>{
+pasteBtn.addEventListener('click', () => {
     if (cutCopyStoreCell) {
         currentCell.innerText = cutCopyStoreCell.text;
         currentCell.style.cssText = cutCopyStoreCell.style;

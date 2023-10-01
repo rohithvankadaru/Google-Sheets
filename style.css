@@ -33,3 +33,11 @@ td{
     background-color: transparent;
     border: none;
 }
+
+.color-bar{
+    padding: 0px;
+    border: none;
+    background-color: transparent;
+    height: 15px;
+    width: 30px;
+}
