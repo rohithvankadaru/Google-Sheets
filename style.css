@@ -10,10 +10,14 @@ td{
     outline: none;
 }
 .excel-btn{
+    cursor: pointer;
     background-color: transparent;
     padding: 7px 20px;
     border: 2px solid grey;
     border-radius: 5px;
+}
+.btn{
+    cursor: pointer;
 }
 #bold-btn{
     font-weight: bold;
@@ -29,9 +33,23 @@ td{
     background-color: #efefef;
 }
 
-#cut-btn, #copy-btn, #paste-btn{
+#cut-btn, #copy-btn, #paste-btn, #fileDownload-btn{
     background-color: transparent;
     border: none;
+}
+
+#nav-bar{
+    width: 80vw;
+    margin-left: 35px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-around;
+}
+.colorContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .color-bar{

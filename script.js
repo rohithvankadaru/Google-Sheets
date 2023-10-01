@@ -9,6 +9,8 @@ const btnHighlightColor = '#efefef';
 const tableHeadRow = document.getElementById('table-heading-row');
 const tBody = document.getElementById('table-body');
 const currentCellHeading = document.getElementById('current-cell');
+const sheetNo = document.getElementById('sheet-no');
+const buttonContainer = document.getElementById('button-container');
 
 
 const boldBtn = document.getElementById('bold-btn');
@@ -17,7 +19,11 @@ const underlineBtn = document.getElementById('underline-btn');
 const leftBtn = document.getElementById('left-btn');
 const centerBtn = document.getElementById('center-btn');
 const rightBtn = document.getElementById('right-btn');
-
+const cutBtn = document.getElementById('cut-btn');
+const copyBtn = document.getElementById('copy-btn');
+const pasteBtn = document.getElementById('paste-btn');
+const fileDownloadBtn = document.getElementById('fileDownload-btn');
+const fileUploadBtn = document.getElementById('fileUpload-btn');
 
 const fontStyleDropdown = document.getElementById('font-style-dropdown');
 const fontSizeDropdown = document.getElementById('font-size-dropdown');
@@ -25,15 +31,22 @@ const fontSizeDropdown = document.getElementById('font-size-dropdown');
 const bgColorInput = document.getElementById('bgColor');
 const fontColorInput = document.getElementById('fontColor');
 
-const cutBtn = document.getElementById('cut-btn');
-const copyBtn = document.getElementById('copy-btn');
-const pasteBtn = document.getElementById('paste-btn');
 
 let prevCellId;
 let currentCell;
-
 let cutCopyStoreCell;
 let isCutOperation;
+let matrix = new Array(ROWS);
+let numOfSheets = 1;
+let currentSheet = 1;
+
+for (let row = 0; row < ROWS; row++) {
+    matrix[row] = new Array(26);
+
+    for (let col = 0; col < COLS; col++) {
+        matrix[row][col] = {};
+    }
+}
 
 function colGenerator(typeOfCell, tableRow, rowNumber) {
     for (let col = 0; col < 26; col++) {
@@ -45,6 +58,7 @@ function colGenerator(typeOfCell, tableRow, rowNumber) {
         else {
             cell.setAttribute('id', `${String.fromCharCode(col + 65)}${rowNumber}`);
             cell.setAttribute("contentEditable", true);
+            cell.addEventListener('input', updateObjectInMatrix);
             cell.addEventListener('focus', (event) => focusHandler(event.target));
             cell.style.textAlign = 'left';
         }
@@ -54,6 +68,36 @@ function colGenerator(typeOfCell, tableRow, rowNumber) {
 
 colGenerator('th', tableHeadRow);
 
+function updateObjectInMatrix() {
+    let id = currentCell.id;
+    let col = id[0].charCodeAt(0) - 65;
+    let row = id.substring(1) - 1;
+
+    let standingCell = matrix[row][col];
+    standingCell.text = currentCell.innerText;
+    standingCell.style = currentCell.style.cssText;
+    standingCell.id = currentCell.id;
+}
+
+fileDownloadBtn.addEventListener('click', ()=>{
+   const matrixString = JSON.stringify(matrix);
+   let blob = new Blob([matrixString], 'application/json');
+   const link = document.createElement('a');
+   link.href = URL.createObjectURL(blob);
+   link.download = 'table.json';
+   link.click();
+});
+
+fileUploadBtn.addEventListener('input', (event)=>{
+    const file =  event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.readAsText(file);
+        reader.onload = function(event) {
+            matrix = JSON.parse(event.target.result);
+        }
+    }
+})
 
 for (let row = 1; row <= ROWS; row++) {
     const tr = document.createElement('tr');
@@ -114,10 +158,10 @@ function setHeaderColor(colId, rowId, color) {
 //  Adding Event Listner to styling buttons
 function addEventListenerToBtns(button, styleProperty, styling, styleRemover) {
     button.addEventListener('click', () => {
-        if (!currentCell) { 
+        if (!currentCell) {
             currentCell = document.getElementById('A1');
             currentCell.focus();
-         }
+        }
         if (currentCell.style[styleProperty] === styling) {
             currentCell.style[styleProperty] = styleRemover;
             button.style.backgroundColor = transparent;
@@ -125,6 +169,7 @@ function addEventListenerToBtns(button, styleProperty, styling, styleRemover) {
             currentCell.style[styleProperty] = styling
             button.style.backgroundColor = btnHighlightColor;
         }
+        updateObjectInMatrix();
     })
 }
 
@@ -136,13 +181,14 @@ addEventListenerToBtns(underlineBtn, 'textDecoration', 'underline', 'none');
 function textAligner(button, textPosition) {
 
     button.addEventListener('click', () => {
-        if (!currentCell) { 
+        if (!currentCell) {
             currentCell = document.getElementById('A1');
             currentCell.focus();
-         }
+        }
         setBackground(transparent, leftBtn, rightBtn, centerBtn);
         button.style.backgroundColor = btnHighlightColor;
         currentCell.style.textAlign = textPosition;
+        updateObjectInMatrix();
     });
 }
 
@@ -158,34 +204,38 @@ function setBackground(color, ...buttons) {
 
 
 fontStyleDropdown.addEventListener('change', () => {
-    if (!currentCell) { 
+    if (!currentCell) {
         currentCell = document.getElementById('A1');
         currentCell.focus();
-     }
+    }
     currentCell.style.fontFamily = fontStyleDropdown.value;
+    updateObjectInMatrix();
 });
 fontSizeDropdown.addEventListener('change', () => {
-    if (!currentCell) { 
+    if (!currentCell) {
         currentCell = document.getElementById('A1');
         currentCell.focus();
-     }
-        currentCell.style.fontSize = fontSizeDropdown.value;
+    }
+    currentCell.style.fontSize = fontSizeDropdown.value;
+    updateObjectInMatrix();
 });
 
 bgColorInput.addEventListener('input', () => {
-    if (!currentCell) { 
+    if (!currentCell) {
         currentCell = document.getElementById('A1');
         currentCell.focus();
-     }
-        currentCell.style.backgroundColor = bgColorInput.value;
+    }
+    currentCell.style.backgroundColor = bgColorInput.value;
+    updateObjectInMatrix();
 });
 
 fontColorInput.addEventListener('input', () => {
-    if (!currentCell) { 
+    if (!currentCell) {
         currentCell = document.getElementById('A1');
         currentCell.focus();
-     }
-        currentCell.style.color = fontColorInput.value;
+    }
+    currentCell.style.color = fontColorInput.value;
+    updateObjectInMatrix();
 });
 
 cutBtn.addEventListener('click', () => {
@@ -198,6 +248,7 @@ cutBtn.addEventListener('click', () => {
 
         currentCell.innerText = null;
         currentCell.style = null;
+        updateObjectInMatrix();
     }
 });
 
@@ -217,6 +268,8 @@ pasteBtn.addEventListener('click', () => {
         currentCell.innerText = cutCopyStoreCell.text;
         currentCell.style.cssText = cutCopyStoreCell.style;
         if (isCutOperation) cutCopyStoreCell = undefined;
+
+        updateObjectInMatrix();
     }
 })
 
