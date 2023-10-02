@@ -1,44 +1,54 @@
-th,td{
+th,
+td {
     min-width: 80px;
     border: 1px solid;
 }
-table{
+
+table {
     border-collapse: collapse;
 }
 
-td{
+td {
     outline: none;
 }
-.excel-btn{
+
+.excel-btn {
     cursor: pointer;
     background-color: transparent;
     padding: 7px 20px;
     border: 2px solid grey;
     border-radius: 5px;
 }
-.btn{
+
+.btn {
     cursor: pointer;
 }
-#bold-btn{
+
+#bold-btn {
     font-weight: bold;
 }
-#underline-btn{
+
+#underline-btn {
     text-decoration: underline 1.5px;
 }
 
-.align-btn{
+.align-btn {
     border: none;
 }
-#left-btn{
+
+#left-btn {
     background-color: #efefef;
 }
 
-#cut-btn, #copy-btn, #paste-btn, #fileDownload-btn{
+#cut-btn,
+#copy-btn,
+#paste-btn,
+#fileDownload-btn {
     background-color: transparent;
     border: none;
 }
 
-#nav-bar{
+#nav-bar {
     width: 95vw;
     margin-left: 35px;
     display: flex;
@@ -46,16 +56,18 @@ td{
     align-items: center;
     justify-content: space-around;
 }
-#nav-bar>*{
+
+#nav-bar>* {
     margin: 10px;
 }
-.colorContainer{
+
+.colorContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.color-bar{
+.color-bar {
     padding: 0px;
     border: none;
     background-color: transparent;

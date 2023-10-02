@@ -1,18 +1,19 @@
 const COLS = 26;
 const ROWS = 100;
 
-
+//constants
 const transparent = 'transparent';
 const btnHighlightColor = '#efefef';
+const arrMatrix = 'arrMatrix';
 
-
+//table components
 const tableHeadRow = document.getElementById('table-heading-row');
 const tBody = document.getElementById('table-body');
 const currentCellHeading = document.getElementById('current-cell');
 const sheetNo = document.getElementById('sheet-no');
-const buttonContainer = document.getElementById('button-container');
+const sheetsButtonContainer = document.getElementById('sheets-button-container');
 
-
+//excel buttons
 const boldBtn = document.getElementById('bold-btn');
 const itallicBtn = document.getElementById('itallic-btn');
 const underlineBtn = document.getElementById('underline-btn');
@@ -24,14 +25,20 @@ const copyBtn = document.getElementById('copy-btn');
 const pasteBtn = document.getElementById('paste-btn');
 const fileDownloadBtn = document.getElementById('fileDownload-btn');
 const fileUploadBtn = document.getElementById('fileUpload-btn');
+const addSheetBtn = document.getElementById('add-sheet-btn');
+const saveSheetBtn = document.getElementById('save-sheet-btn');
 
+
+//dropdowns
 const fontStyleDropdown = document.getElementById('font-style-dropdown');
 const fontSizeDropdown = document.getElementById('font-size-dropdown');
 
+
+//input tags
 const bgColorInput = document.getElementById('bgColor');
 const fontColorInput = document.getElementById('fontColor');
 
-
+//cache
 let prevCellId;
 let currentCell;
 let cutCopyStoreCell;
@@ -39,14 +46,24 @@ let isCutOperation;
 let matrix = new Array(ROWS);
 let numOfSheets = 1;
 let currentSheet = 1;
+let uploadedMatrix;
 
-for (let row = 0; row < ROWS; row++) {
-    matrix[row] = new Array(26);
+window.addEventListener('load',()=>{
+    console.log(111111);
+    document.getElementById('sheet-1').click();
+});
 
-    for (let col = 0; col < COLS; col++) {
-        matrix[row][col] = {};
+//adding objs to matrix
+function createNewMatrix() {
+    for (let row = 0; row < ROWS; row++) {
+        matrix[row] = new Array(26);
+
+        for (let col = 0; col < COLS; col++) {
+            matrix[row][col] = {};
+        }
     }
 }
+createNewMatrix();
 
 function colGenerator(typeOfCell, tableRow, rowNumber) {
     for (let col = 0; col < 26; col++) {
@@ -94,21 +111,27 @@ fileUploadBtn.addEventListener('input', (event) => {
         const reader = new FileReader();
         reader.readAsText(file);
         reader.onload = function (event) {
-            matrix = JSON.parse(event.target.result);
+            fileContent = JSON.parse(event.target.result);
+            matrix = fileContent;
+            tableBodyGen();
+            renderMatrix();
         }
     }
 })
 
-for (let row = 1; row <= ROWS; row++) {
-    const tr = document.createElement('tr');
-    const th = document.createElement('th');
-    th.innerText = row;
-    th.setAttribute('id', row);
-    tr.appendChild(th);
-    colGenerator('td', tr, row);
-    tBody.appendChild(tr);
+function tableBodyGen() {
+    tBody.innerHTML = null;
+    for (let row = 1; row <= ROWS; row++) {
+        const tr = document.createElement('tr');
+        const th = document.createElement('th');
+        th.innerText = row;
+        th.setAttribute('id', row);
+        tr.appendChild(th);
+        colGenerator('td', tr, row);
+        tBody.appendChild(tr);
+    }
 }
-
+tableBodyGen();
 
 
 // Fn for hnadling on focusing on current cell
@@ -271,12 +294,59 @@ pasteBtn.addEventListener('click', () => {
 
         updateObjectInMatrix();
     }
-})
+});
 
+function genNextSheetButton() {
+    const btn = document.createElement('button');
+    btn.innerText = `Sheet ${currentSheet}`;
+    btn.setAttribute('id', `sheet-${currentSheet}`);
+    btn.setAttribute('onClick', 'viewSheet(event)')
+    sheetsButtonContainer.appendChild(btn);
+}
 
+addSheetBtn.addEventListener('click', () => {
+    numOfSheets++;
+    currentSheet = numOfSheets;
+    genNextSheetButton();
+    sheetNo.innerText = `Sheet No - ${currentSheet}`;
+    saveMatrix();
+    createNewMatrix();
+    tableBodyGen();
+});
 
+function saveMatrix() {
+    if (localStorage.getItem(arrMatrix)) {
+        let tempArrMatrix = JSON.parse(localStorage.getItem(arrMatrix));
+        tempArrMatrix.push(matrix);
+        localStorage.setItem(arrMatrix, JSON.stringify(tempArrMatrix));
+    }
+    else {
+        let tempArrayMatrix = [matrix];
+        localStorage.setItem(arrMatrix, JSON.stringify(tempArrayMatrix));
+    }
+}
 
+function renderMatrix() {
+    matrix.forEach(row => {
+        row.forEach(cellObj => {
+            if (cellObj.id) {
+                let currentCell = document.getElementById(cellObj.id);
+                currentCell.innerText = cellObj.text;
+                currentCell.style = cellObj.style;
+            }
+        });
+    });
+}
 
+function viewSheet(event) {
+    saveMatrix();
+    let currentSheet = event.target.id.split('-')[1];
+    sheetNo.innerText = `Sheet No - ${currentSheet}`;
+    let matrixArr = JSON.parse(localStorage.getItem(arrMatrix));
+    matrix = matrixArr[currentSheet - 1];
+    tableBodyGen();
+    renderMatrix();
+}
 
 
 
