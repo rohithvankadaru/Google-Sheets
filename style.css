@@ -12,6 +12,19 @@ td {
     outline: none;
 }
 
+#current-cell{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    border: 1px solid darkgrey;
+    background-color: #efefef;
+    width: 50px;
+    height: 35px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
 .excel-btn {
     cursor: pointer;
     background-color: transparent;

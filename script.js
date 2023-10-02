@@ -131,12 +131,22 @@ function tableBodyGen() {
 tableBodyGen();
 
 
+if (localStorage.getItem(arrMatrix)) {
+    let matrixArr = JSON.parse(localStorage.getItem(arrMatrix));
+    matrix = matrixArr[0];
+    renderMatrix();
+    numOfSheets = matrixArr.length;
+    for (let i = 1; i < numOfSheets; i++) {
+        genNextSheetButton(i+1);
+    }
+}
+
 // Fn for hnadling on focusing on current cell
 function focusHandler(cell) {
 
     currentCell = cell;
 
-    currentCellHeading.innerText = currentCell.id + " selected";
+    currentCellHeading.innerText = currentCell.id;
     if (prevCellId) {
         setHeaderColor(prevCellId[0], prevCellId.substring(1), transparent);
     }
@@ -293,10 +303,10 @@ pasteBtn.addEventListener('click', () => {
     }
 });
 
-function genNextSheetButton() {
+function genNextSheetButton(sheetNo) {
     const btn = document.createElement('button');
-    btn.innerText = `Sheet ${currentSheet}`;
-    btn.setAttribute('id', `sheet-${currentSheet}`);
+    btn.innerText = `Sheet ${sheetNo || currentSheet}`;
+    btn.setAttribute('id', `sheet-${sheetNo || currentSheet}`);
     btn.setAttribute('onClick', 'viewSheet(event)')
     sheetsButtonContainer.appendChild(btn);
 }
@@ -336,13 +346,14 @@ function renderMatrix() {
 }
 
 saveSheetBtn.addEventListener('click', () => {
-    let matrixArr = JSON.parse(localStorage.getItem(arrMatrix));
-    if(matrixArr){
+    
+    if (localStorage.getItem(arrMatrix)) {
+        let matrixArr = JSON.parse(localStorage.getItem(arrMatrix));
         matrixArr[currentSheet - 1] = matrix;
-        localStorage.setItem(arrMatrix, matrixArr);
+        localStorage.setItem(arrMatrix, JSON.stringify(matrixArr));
     }
-    else{
-        let tempArrayMatrix = [matrix];
+    else {
+        let tempArrayMatrix = [JSON.stringify(matrix)];
         localStorage.setItem(arrMatrix, JSON.stringify(tempArrayMatrix));
     }
 });
@@ -350,14 +361,16 @@ saveSheetBtn.addEventListener('click', () => {
 function viewSheet(event) {
     prevSheet = currentSheet;
     currentSheet = event.target.id.split('-')[1];
-    let matrixArr = JSON.parse(localStorage.getItem(arrMatrix));
-    matrixArr[prevSheet - 1] = matrix;
-    localStorage.setItem(arrMatrix, JSON.stringify(matrixArr));
+    if (currentSheet !== prevSheet) {
+        let matrixArr = JSON.parse(localStorage.getItem(arrMatrix));
+        matrixArr[prevSheet - 1] = matrix;
+        localStorage.setItem(arrMatrix, JSON.stringify(matrixArr));
 
-    sheetNo.innerText = `Sheet No - ${currentSheet}`;
-    matrix = matrixArr[currentSheet - 1];
-    tableBodyGen();
-    renderMatrix();
+        sheetNo.innerText = `Sheet No - ${currentSheet}`;
+        matrix = matrixArr[currentSheet - 1];
+        tableBodyGen();
+        renderMatrix();
+    }
 }
 
 
