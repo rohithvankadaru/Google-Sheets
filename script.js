@@ -46,12 +46,9 @@ let isCutOperation;
 let matrix = new Array(ROWS);
 let numOfSheets = 1;
 let currentSheet = 1;
+let prevSheet;
 let uploadedMatrix;
 
-window.addEventListener('load',()=>{
-    console.log(111111);
-    document.getElementById('sheet-1').click();
-});
 
 //adding objs to matrix
 function createNewMatrix() {
@@ -338,11 +335,26 @@ function renderMatrix() {
     });
 }
 
-function viewSheet(event) {
-    saveMatrix();
-    let currentSheet = event.target.id.split('-')[1];
-    sheetNo.innerText = `Sheet No - ${currentSheet}`;
+saveSheetBtn.addEventListener('click', () => {
     let matrixArr = JSON.parse(localStorage.getItem(arrMatrix));
+    if(matrixArr){
+        matrixArr[currentSheet - 1] = matrix;
+        localStorage.setItem(arrMatrix, matrixArr);
+    }
+    else{
+        let tempArrayMatrix = [matrix];
+        localStorage.setItem(arrMatrix, JSON.stringify(tempArrayMatrix));
+    }
+});
+
+function viewSheet(event) {
+    prevSheet = currentSheet;
+    currentSheet = event.target.id.split('-')[1];
+    let matrixArr = JSON.parse(localStorage.getItem(arrMatrix));
+    matrixArr[prevSheet - 1] = matrix;
+    localStorage.setItem(arrMatrix, JSON.stringify(matrixArr));
+
+    sheetNo.innerText = `Sheet No - ${currentSheet}`;
     matrix = matrixArr[currentSheet - 1];
     tableBodyGen();
     renderMatrix();
