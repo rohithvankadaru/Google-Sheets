@@ -137,7 +137,7 @@ if (localStorage.getItem(arrMatrix)) {
     renderMatrix();
     numOfSheets = matrixArr.length;
     for (let i = 1; i < numOfSheets; i++) {
-        genNextSheetButton(i+1);
+        genNextSheetButton(i + 1);
     }
 }
 
@@ -319,6 +319,9 @@ addSheetBtn.addEventListener('click', () => {
     saveMatrix();
     createNewMatrix();
     tableBodyGen();
+    if (currentCell) {
+        document.getElementById(currentCell.id[0]).style.backgroundColor = transparent;
+    }
 });
 
 function saveMatrix() {
@@ -346,7 +349,7 @@ function renderMatrix() {
 }
 
 saveSheetBtn.addEventListener('click', () => {
-    
+
     if (localStorage.getItem(arrMatrix)) {
         let matrixArr = JSON.parse(localStorage.getItem(arrMatrix));
         matrixArr[currentSheet - 1] = matrix;
@@ -370,6 +373,9 @@ function viewSheet(event) {
         matrix = matrixArr[currentSheet - 1];
         tableBodyGen();
         renderMatrix();
+        if (currentCell) {
+            document.getElementById(currentCell.id[0]).style.backgroundColor = transparent;
+        }
     }
 }
 
