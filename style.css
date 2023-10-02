@@ -39,12 +39,15 @@ td{
 }
 
 #nav-bar{
-    width: 80vw;
+    width: 95vw;
     margin-left: 35px;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-around;
+}
+#nav-bar>*{
+    margin: 10px;
 }
 .colorContainer{
     display: flex;

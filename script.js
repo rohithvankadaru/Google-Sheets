@@ -79,21 +79,21 @@ function updateObjectInMatrix() {
     standingCell.id = currentCell.id;
 }
 
-fileDownloadBtn.addEventListener('click', ()=>{
-   const matrixString = JSON.stringify(matrix);
-   let blob = new Blob([matrixString], 'application/json');
-   const link = document.createElement('a');
-   link.href = URL.createObjectURL(blob);
-   link.download = 'table.json';
-   link.click();
+fileDownloadBtn.addEventListener('click', () => {
+    const matrixString = JSON.stringify(matrix);
+    let blob = new Blob([matrixString], { type: 'application/json' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'table.json';
+    link.click();
 });
 
-fileUploadBtn.addEventListener('input', (event)=>{
-    const file =  event.target.files[0];
+fileUploadBtn.addEventListener('input', (event) => {
+    const file = event.target.files[0];
     if (file) {
         const reader = new FileReader();
         reader.readAsText(file);
-        reader.onload = function(event) {
+        reader.onload = function (event) {
             matrix = JSON.parse(event.target.result);
         }
     }
