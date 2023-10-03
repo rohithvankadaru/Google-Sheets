@@ -356,7 +356,7 @@ saveSheetBtn.addEventListener('click', () => {
         localStorage.setItem(arrMatrix, JSON.stringify(matrixArr));
     }
     else {
-        let tempArrayMatrix = [matrix];
+        let tempArrayMatrix = [JSON.stringify(matrix)];
         localStorage.setItem(arrMatrix, JSON.stringify(tempArrayMatrix));
     }
 });
