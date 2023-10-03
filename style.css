@@ -61,7 +61,7 @@ td {
     border: none;
 }
 
-#nav-bar {
+#tool-bar {
     width: 95vw;
     margin-left: 35px;
     display: flex;
@@ -70,7 +70,7 @@ td {
     justify-content: space-around;
 }
 
-#nav-bar>* {
+#tool-bar>* {
     margin: 10px;
 }
 
